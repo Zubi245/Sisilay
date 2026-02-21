@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Reset Images - Sam Fabrics</title>
+</head>
+<body>
+    <h1>Resetting Product Images...</h1>
+    <p>This will clear localStorage and reload products with fresh images.</p>
+    <script>
+        localStorage.removeItem('sam_fabrics_products');
+        localStorage.removeItem('sam_fabrics_products_version');
+        localStorage.removeItem('sam_fabrics_cart');
+        alert('LocalStorage cleared! Now refresh your main page.');
+        window.location.href = '/';
+    </script>
+</body>
+</html>
+
+
+
+
