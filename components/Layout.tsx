@@ -32,8 +32,18 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
           </button>
 
           {/* Logo */}
-          <Link to="/" className="text-xl md:text-2xl font-serif font-bold tracking-tight text-gray-900 hover:scale-105 transition-transform duration-300">
-            <span className="text-green-600">Silsilay</span>
+          <Link to="/" className="flex items-center gap-2 md:gap-3 hover:scale-105 transition-transform duration-300">
+            <img 
+              src="/logo.png" 
+              alt="Silsilay Logo" 
+              className="w-10 h-10 md:w-12 md:h-12 rounded-full object-cover shadow-md border-2 border-green-600"
+              onError={(e) => {
+                e.currentTarget.style.display = 'none';
+              }}
+            />
+            <span className="text-xl md:text-2xl font-serif font-bold tracking-tight text-green-600">
+              Silsilay
+            </span>
           </Link>
 
           {/* Desktop Links */}
@@ -86,7 +96,17 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
             onClick={e => e.stopPropagation()}
           >
             <div className="p-6 border-b border-gray-100 flex justify-between items-center">
-               <span className="font-serif font-bold text-xl">Menu</span>
+               <div className="flex items-center gap-2">
+                 <img 
+                   src="/logo.png" 
+                   alt="Silsilay Logo" 
+                   className="w-8 h-8 rounded-full object-cover shadow-md border-2 border-green-600"
+                   onError={(e) => {
+                     e.currentTarget.style.display = 'none';
+                   }}
+                 />
+                 <span className="font-serif font-bold text-xl text-green-600">Silsilay</span>
+               </div>
                <button onClick={() => setIsMenuOpen(false)}><X size={24} /></button>
             </div>
             <div className="flex flex-col p-6 space-y-6 text-sm font-bold uppercase tracking-wide">
