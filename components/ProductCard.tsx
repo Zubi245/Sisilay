@@ -50,11 +50,11 @@ export const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, ease: "easeOut" }}
-          whileHover={{ y: -8 }}
-          className="group bg-[#FFF5E1] rounded-xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300 relative h-full flex flex-col border-2 border-[#F0E5D0]"
+          className="group transition-all duration-300 relative h-full flex flex-col"
+          style={{ width: '100%', maxWidth: '300px', margin: '0 auto' }}
         >
-          {/* Image Container - Fixed aspect ratio */}
-          <div className="relative overflow-hidden aspect-[3/4] w-full">
+          {/* Image Container - 4:5 aspect ratio for tall outfit display */}
+          <div className="relative overflow-hidden w-full" style={{ aspectRatio: '4/5' }}>
             <motion.img 
               key={product.images?.[0] || 'fallback'}
               src={getPrimaryImage(product)} 
@@ -64,61 +64,92 @@ export const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
                 e.currentTarget.onerror = null;
                 e.currentTarget.src = FALLBACK_IMAGE;
               }}
-              whileHover={{ scale: 1.08 }}
-              transition={{ duration: 0.4, ease: "easeInOut" }}
-              className="w-full h-full object-cover"
+              whileHover={{ scale: 1.04 }}
+              transition={{ duration: 0.7, ease: [0.4, 0, 0.2, 1] }}
+              className="w-full h-full object-cover object-center"
             />
-            {product.salePrice && (
-              <motion.div 
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
-                className="absolute top-3 left-3 bg-red-500 text-white text-xs font-bold px-3 py-1.5 rounded-full uppercase tracking-wider shadow-lg"
-              >
-                Sale
-              </motion.div>
-            )}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
             
-            {/* Action Buttons */}
-            <div className="absolute bottom-3 right-3 flex flex-col gap-2 translate-y-20 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300 z-10">
+            {/* Optional wishlist icon - top right */}
+            <motion.button
+              initial={{ opacity: 0 }}
+              whileHover={{ scale: 1.08 }}
+              className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-400 bg-white/85 backdrop-blur-sm p-2 rounded-full"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+              }}
+            >
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#111111" strokeWidth="1.5">
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+              </svg>
+            </motion.button>
+            
+            {/* Very subtle hover overlay */}
+            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/3 transition-all duration-600 pointer-events-none" />
+            
+            {/* Action Buttons - minimal and elegant */}
+            <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-2 translate-y-10 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-400 z-10">
               <motion.button 
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.95 }}
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
                 onClick={handleQuickView}
-                className="bg-white p-2.5 rounded-full text-gray-800 shadow-lg hover:bg-orange-500 hover:text-white transition-colors duration-300"
+                className="px-5 py-2 text-[10px] uppercase tracking-widest transition-all duration-300 font-medium"
+                style={{ backgroundColor: '#000000', color: '#FFFFFF', border: '1px solid #000000' }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = '#FFFFFF';
+                  e.currentTarget.style.color = '#000000';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = '#000000';
+                  e.currentTarget.style.color = '#FFFFFF';
+                }}
                 title="Quick View"
               >
-                <Eye size={18} />
+                Quick View
               </motion.button>
               <motion.button 
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.95 }}
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
                 onClick={handleAddToCart}
-                className={`p-2.5 rounded-full shadow-lg transition-colors duration-300 ${isAdded ? 'bg-orange-600 text-white' : 'bg-white text-gray-800 hover:bg-orange-500 hover:text-white'}`}
+                className="px-5 py-2 text-[10px] uppercase tracking-widest transition-all duration-300 font-medium"
+                style={{ 
+                  backgroundColor: isAdded ? '#000000' : '#000000',
+                  color: '#FFFFFF',
+                  border: '1px solid #000000'
+                }}
+                onMouseEnter={(e) => {
+                  if (!isAdded) {
+                    e.currentTarget.style.backgroundColor = '#FFFFFF';
+                    e.currentTarget.style.color = '#000000';
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = '#000000';
+                  e.currentTarget.style.color = '#FFFFFF';
+                }}
                 title="Add to Cart"
               >
-                {isAdded ? <Check size={18} /> : <ShoppingCart size={18} />}
+                {isAdded ? 'Added' : 'Add to Cart'}
               </motion.button>
             </div>
           </div>
           
-          {/* Product Info - Fixed height */}
-          <div className="p-4 bg-[#FFFBF0] flex-grow flex flex-col justify-between min-h-[120px] border-t-2 border-[#F0E5D0]">
-            <div>
-              <p className="text-xs text-gray-600 uppercase tracking-widest mb-1 font-medium truncate">{product.category}</p>
-              <h3 className="font-serif text-base md:text-lg font-semibold text-gray-900 mb-2 hover:text-green-700 transition-colors line-clamp-2 min-h-[3rem]">
-                {product.name}
-              </h3>
-            </div>
-            <div className="flex items-center space-x-2 mt-auto">
+          {/* Text Section - Floating naturally below image with NO background */}
+          <div className="text-center" style={{ marginTop: '16px' }}>
+            {/* Product Name - Elegant Serif */}
+            <h3 className="font-serif text-[16px] font-medium leading-snug tracking-wide" style={{ color: '#111111', letterSpacing: '0.5px', marginBottom: '9px' }}>
+              {product.name}
+            </h3>
+            
+            {/* Price - Clean Sans-serif */}
+            <div className="flex items-center justify-center gap-2">
               {product.salePrice ? (
                 <>
-                  <span className="text-green-700 font-bold text-base md:text-lg">PKR {product.salePrice.toLocaleString()}</span>
-                  <span className="text-gray-500 line-through text-xs md:text-sm">PKR {product.price.toLocaleString()}</span>
+                  <span className="text-[14px] font-light" style={{ color: '#111111' }}>PKR {product.salePrice.toLocaleString()}</span>
+                  <span className="text-[13px] font-light line-through" style={{ color: '#444444' }}>PKR {product.price.toLocaleString()}</span>
                 </>
               ) : (
-                <span className="text-gray-900 font-bold text-base md:text-lg">PKR {product.price.toLocaleString()}</span>
+                <span className="text-[14px] font-light" style={{ color: '#444444' }}>PKR {product.price.toLocaleString()}</span>
               )}
             </div>
           </div>
@@ -186,11 +217,16 @@ export const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   onClick={handleAddToCart}
-                  className={`w-full py-4 rounded-lg uppercase tracking-widest text-sm font-bold transition-all duration-300 flex items-center justify-center gap-2 ${
-                    isAdded 
-                    ? 'bg-orange-600 text-white shadow-lg' 
-                    : 'bg-orange-500 text-white hover:bg-orange-600 shadow-md hover:shadow-lg'
-                  }`}
+                  className="w-full py-4 text-sm uppercase tracking-widest font-bold transition-all duration-300 flex items-center justify-center gap-2 shadow-lg"
+                  style={{ backgroundColor: '#000000', color: '#FFFFFF', border: '1px solid #000000' }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor = '#FFFFFF';
+                    e.currentTarget.style.color = '#000000';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = '#000000';
+                    e.currentTarget.style.color = '#FFFFFF';
+                  }}
                 >
                   {isAdded ? (
                     <>
@@ -207,7 +243,16 @@ export const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
                 
                 <Link 
                   to={`/product/${product.id}`}
-                  className="block w-full border-2 border-orange-500 text-orange-600 py-3.5 rounded-lg uppercase tracking-widest text-sm font-bold hover:bg-orange-50 transition-colors text-center"
+                  className="block w-full py-3.5 text-sm uppercase tracking-widest font-bold transition-colors text-center"
+                  style={{ backgroundColor: '#FFFFFF', color: '#000000', border: '1px solid #000000' }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor = '#000000';
+                    e.currentTarget.style.color = '#FFFFFF';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = '#FFFFFF';
+                    e.currentTarget.style.color = '#000000';
+                  }}
                 >
                   View Full Details
                 </Link>

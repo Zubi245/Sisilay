@@ -1148,7 +1148,7 @@ const INITIAL_HERO_SLIDES: HeroSlide[] = [
   {
     id: '3',
     image: 'https://images.unsplash.com/photo-1596783439326-8439e3038681?q=80&w=2070&auto=format&fit=crop',
-    title: 'Wedding Festivities',
+    title: 'COUTURE',
     subtitle: 'Embroidered perfection',
     enabled: true,
     sortOrder: 2,

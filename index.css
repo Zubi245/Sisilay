@@ -1,30 +1,72 @@
-/* Base styles */
+/* Base styles - Pure White & Black System */
 body {
-  background-color: #FFF8E7;
-  color: #1a1a1a;
+  background-color: #FFFFFF;
+  color: #111111;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   margin: 0;
 }
 
 h1, h2, h3, h4, h5, h6 {
   font-family: 'Playfair Display', serif;
-  color: #1a1a1a;
+  color: #111111;
 }
 
-/* Custom Silsilay Theme Colors */
+/* Strict Black & White Color System */
 :root {
-  --color-cream-bg: #FFF8E7;
-  --color-cream-light: #FFFBF0;
-  --color-cream-dark: #F5EFE0;
-  --color-cream-container: #FFF5E1;
-  --color-cream-border: #F0E5D0;
-  --color-cream-accent: #E8DCC8;
-  --color-green-accent: #66BB6A;
-  --color-green-hover: #4CAF50;
-  --color-green-dark: #388E3C;
-  --color-text-primary: #1a1a1a;
-  --color-text-secondary: #666666;
-  --color-border: #E0E0E0;
+  --color-bg: #FFFFFF;
+  --color-text-primary: #111111;
+  --color-text-secondary: #444444;
+  --color-border: #E5E5E5;
+  --color-black: #000000;
+  --color-white: #FFFFFF;
+}
+
+/* GLOBAL BUTTON STYLES - Apply to ALL buttons */
+button,
+.btn,
+a.btn,
+input[type="submit"],
+input[type="button"] {
+  background-color: var(--color-black);
+  color: var(--color-white);
+  border: 1px solid var(--color-black);
+  transition: all 250ms ease-in-out;
+  cursor: pointer;
+}
+
+button:hover,
+.btn:hover,
+a.btn:hover,
+input[type="submit"]:hover,
+input[type="button"]:hover {
+  background-color: var(--color-white);
+  color: var(--color-black);
+  border: 1px solid var(--color-black);
+}
+
+button:disabled,
+.btn:disabled,
+a.btn:disabled,
+input[type="submit"]:disabled,
+input[type="button"]:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Link buttons that should follow button styling */
+a.button-link {
+  background-color: var(--color-black);
+  color: var(--color-white);
+  border: 1px solid var(--color-black);
+  transition: all 250ms ease-in-out;
+  text-decoration: none;
+  display: inline-block;
+}
+
+a.button-link:hover {
+  background-color: var(--color-white);
+  color: var(--color-black);
+  border: 1px solid var(--color-black);
 }
 
 /* Utility helpers */
@@ -74,16 +116,66 @@ h1, h2, h3, h4, h5, h6 {
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Product Card Styles */
-.product-card {
-  background-color: var(--color-cream-container);
-  border-radius: 12px;
-  transition: all 0.3s ease;
+/* Footer Styling - Black Background */
+footer {
+  background-color: var(--color-black);
+  color: var(--color-white);
 }
 
-.product-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 24px rgba(240, 229, 208, 0.5);
+footer a {
+  color: var(--color-white);
+  transition: opacity 250ms ease-in-out;
+}
+
+footer a:hover {
+  opacity: 0.7;
+}
+
+footer button {
+  background-color: var(--color-black);
+  color: var(--color-white);
+  border: 1px solid var(--color-white);
+}
+
+footer button:hover {
+  background-color: var(--color-white);
+  color: var(--color-black);
+  border: 1px solid var(--color-black);
+}
+
+/* Airy Luxury Fashion Product Grid - High-End Couture Style */
+.product-grid {
+  display: grid;
+  width: 100%;
+  justify-items: center;
+  background: transparent;
+}
+
+/* Desktop: 4 cards per row with generous airy spacing */
+@media (min-width: 1024px) {
+  .product-grid {
+    grid-template-columns: repeat(4, minmax(260px, 300px));
+    column-gap: 34px;
+    row-gap: 44px;
+  }
+}
+
+/* Tablet: 2-3 cards per row with comfortable spacing */
+@media (min-width: 640px) and (max-width: 1023px) {
+  .product-grid {
+    grid-template-columns: repeat(auto-fit, minmax(260px, 300px));
+    column-gap: 30px;
+    row-gap: 40px;
+  }
+}
+
+/* Mobile: 1 card per row with breathable vertical spacing */
+@media (max-width: 639px) {
+  .product-grid {
+    grid-template-columns: 1fr;
+    row-gap: 36px;
+    padding: 0 20px;
+  }
 }
 
 /* Button Styles */

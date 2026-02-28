@@ -87,13 +87,23 @@ export const Home = () => {
               loading="lazy"
             />
             <div className="absolute inset-0 z-20 flex flex-col items-center justify-center text-center text-white p-4">
-              <p className="text-green-300 uppercase tracking-[0.3em] mb-4 text-xs md:text-sm animate-fade-in-up font-semibold">New Arrivals 2024</p>
+              <p className="uppercase tracking-[0.3em] mb-4 text-xs md:text-sm animate-fade-in-up font-medium" style={{ color: '#FFFFFF' }}>New Arrivals 2024</p>
               <h1 className="font-serif text-4xl md:text-6xl lg:text-7xl mb-4 md:mb-6 animate-fade-in-up leading-tight font-bold" style={{ animationDelay: '0.2s' }}>{slide.title}</h1>
               <p className="text-base md:text-xl font-light mb-6 md:mb-8 max-w-2xl animate-fade-in-up" style={{ animationDelay: '0.4s' }}>{slide.subtitle}</p>
               <Link 
                 to="/shop" 
-                className="bg-green-500 text-white px-8 md:px-10 py-3.5 rounded-full uppercase tracking-widest text-xs md:text-sm font-bold hover:bg-green-600 hover:shadow-xl transition-all duration-300 animate-fade-in-up transform hover:scale-105"
-                style={{ animationDelay: '0.6s' }}
+                className="text-white px-8 md:px-10 py-3.5 uppercase tracking-widest text-xs md:text-sm font-bold shadow-xl transition-all animate-fade-in-up transform hover:scale-105"
+                style={{ backgroundColor: '#000000', animationDelay: '0.6s', border: '1px solid transparent' }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = '#FFFFFF';
+                  e.currentTarget.style.color = '#000000';
+                  e.currentTarget.style.border = '1px solid #000000';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = '#000000';
+                  e.currentTarget.style.color = '#FFFFFF';
+                  e.currentTarget.style.border = '1px solid transparent';
+                }}
               >
                 Shop Now
               </Link>
@@ -108,9 +118,13 @@ export const Home = () => {
               <button
                 key={index}
                 onClick={() => setCurrentSlide(index)}
-                className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
-                  index === currentSlide ? 'bg-green-500 w-8' : 'bg-white/50 hover:bg-white/80'
+                className={`h-2.5 transition-all duration-300 ${
+                  index === currentSlide ? 'w-8' : 'w-2.5'
                 }`}
+                style={{ 
+                  backgroundColor: index === currentSlide ? '#FFFFFF' : 'rgba(255, 255, 255, 0.5)',
+                  borderRadius: '9999px'
+                }}
               />
             ))}
           </div>
@@ -118,24 +132,83 @@ export const Home = () => {
       </div>
 
       {/* Featured Products */}
-      <div className="container mx-auto px-4 py-12 md:py-20 bg-[#FFF8E7]">
-        <div className="text-center mb-8 md:mb-12">
-          <p className="text-orange-600 text-xs md:text-sm uppercase tracking-widest font-bold mb-2">Curated For You</p>
-          <h2 className="font-serif text-3xl md:text-4xl text-gray-900 font-bold">Featured Collection</h2>
-          <div className="w-24 h-1 bg-orange-500 mx-auto mt-4 rounded-full"></div>
+      <div className="container mx-auto px-4 py-12 md:py-20 bg-white">
+        <div className="text-center mb-12 md:mb-16">
+          <p className="text-xs md:text-sm uppercase tracking-widest font-light mb-3" style={{ color: '#444444' }}>Curated For You</p>
+          <h2 className="font-serif text-3xl md:text-4xl font-bold" style={{ color: '#111111' }}>Featured Collection</h2>
+          <div className="w-16 h-px mx-auto mt-5" style={{ backgroundColor: '#111111' }}></div>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+        <div className="product-grid w-full max-w-[1400px] mx-auto">
           {products.map(product => (
             <ProductCard key={product.id} product={product} />
           ))}
         </div>
 
-        <div className="text-center mt-12">
-          <Link to="/shop" className="inline-flex items-center space-x-2 text-gray-900 hover:text-orange-600 font-semibold uppercase tracking-wide border-b-2 border-gray-900 hover:border-orange-600 pb-1 transition-all duration-300 transform hover:scale-105">
+        <div className="text-center mt-16">
+          <Link to="/shop" className="inline-flex items-center space-x-2 font-medium uppercase tracking-wide border-b pb-1 transition-all duration-300 text-sm hover:opacity-70" style={{ color: '#111111', borderColor: '#111111' }}>
             <span>View All Products</span>
-            <ArrowRight size={18} />
+            <ArrowRight size={16} />
           </Link>
+        </div>
+      </div>
+
+      {/* Customer Reviews Section */}
+      <div className="container mx-auto px-4 py-16 md:py-24 bg-white">
+        <div className="text-center mb-12 md:mb-20">
+          <p className="text-xs md:text-sm uppercase tracking-widest font-light mb-3" style={{ color: '#444444' }}>Testimonials</p>
+          <h2 className="font-serif text-3xl md:text-4xl font-bold" style={{ color: '#111111' }}>What Our Customers Say</h2>
+          <div className="w-16 h-px mx-auto mt-5" style={{ backgroundColor: '#111111' }}></div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 max-w-[1200px] mx-auto">
+          {/* Review 1 */}
+          <div className="text-center px-6 py-8 transition-all duration-300 hover:transform hover:scale-105">
+            <div className="mb-6">
+              <svg className="w-8 h-8 mx-auto" style={{ color: '#111111' }} fill="currentColor" viewBox="0 0 24 24">
+                <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/>
+              </svg>
+            </div>
+            <p className="text-sm md:text-base leading-relaxed mb-6 font-light" style={{ color: '#444444' }}>
+              "Absolutely stunning quality! The fabric is luxurious and the embroidery is exquisite. Worth every penny."
+            </p>
+            <div className="pt-4" style={{ borderTop: '1px solid #E5E5E5' }}>
+              <p className="font-serif text-base font-medium mb-1" style={{ color: '#111111' }}>Ayesha Khan</p>
+              <p className="text-xs uppercase tracking-wider" style={{ color: '#888888' }}>Lahore</p>
+            </div>
+          </div>
+
+          {/* Review 2 */}
+          <div className="text-center px-6 py-8 transition-all duration-300 hover:transform hover:scale-105">
+            <div className="mb-6">
+              <svg className="w-8 h-8 mx-auto" style={{ color: '#111111' }} fill="currentColor" viewBox="0 0 24 24">
+                <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/>
+              </svg>
+            </div>
+            <p className="text-sm md:text-base leading-relaxed mb-6 font-light" style={{ color: '#444444' }}>
+              "The best unstitched suits I've ever purchased. Premium quality and elegant designs. Highly recommended!"
+            </p>
+            <div className="pt-4" style={{ borderTop: '1px solid #E5E5E5' }}>
+              <p className="font-serif text-base font-medium mb-1" style={{ color: '#111111' }}>Fatima Ahmed</p>
+              <p className="text-xs uppercase tracking-wider" style={{ color: '#888888' }}>Karachi</p>
+            </div>
+          </div>
+
+          {/* Review 3 */}
+          <div className="text-center px-6 py-8 transition-all duration-300 hover:transform hover:scale-105">
+            <div className="mb-6">
+              <svg className="w-8 h-8 mx-auto" style={{ color: '#111111' }} fill="currentColor" viewBox="0 0 24 24">
+                <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/>
+              </svg>
+            </div>
+            <p className="text-sm md:text-base leading-relaxed mb-6 font-light" style={{ color: '#444444' }}>
+              "Exceptional service and beautiful collection. The velvet suits are my favorite. Will definitely order again!"
+            </p>
+            <div className="pt-4" style={{ borderTop: '1px solid #E5E5E5' }}>
+              <p className="font-serif text-base font-medium mb-1" style={{ color: '#111111' }}>Zara Malik</p>
+              <p className="text-xs uppercase tracking-wider" style={{ color: '#888888' }}>Islamabad</p>
+            </div>
+          </div>
         </div>
       </div>
     </div>

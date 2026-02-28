@@ -114,7 +114,7 @@ export const Shop = () => {
   });
 
   return (
-    <div className="container mx-auto px-4 py-12 bg-[#FFF8E7] min-h-screen">
+    <div className="container mx-auto px-4 py-12 bg-white min-h-screen">
       <SEO 
         title="Shop All Products" 
         description="Browse our complete collection of luxury unstitched suits. Find your perfect style in Velvet, Lawn, Chiffon, and Jacquard."
@@ -124,11 +124,11 @@ export const Shop = () => {
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="flex flex-col mb-8"
+        className="flex flex-col mb-12"
       >
-        <h1 className="font-serif text-3xl md:text-4xl text-gray-900 mb-6 font-bold">Shop Collection</h1>
+        <h1 className="font-serif text-3xl md:text-4xl mb-8 font-bold" style={{ color: '#111111' }}>Shop Collection</h1>
         
-        <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 bg-[#FFFBF0] p-6 rounded-xl shadow-md border border-gray-100">
+        <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 py-6 border-b" style={{ borderColor: '#E5E5E5' }}>
           
           {/* Category Filter */}
           <div className="w-full lg:w-auto overflow-x-auto pb-2 lg:pb-0 scrollbar-hide">
@@ -139,11 +139,30 @@ export const Shop = () => {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={() => setFilter(cat)}
-                  className={`px-5 py-2.5 text-sm uppercase tracking-wide rounded-full transition-all whitespace-nowrap font-medium ${
+                  className={`px-5 py-2.5 text-sm uppercase tracking-wide transition-all whitespace-nowrap font-bold ${
                     filter === cat 
-                    ? 'bg-orange-500 text-white shadow-md' 
-                    : 'bg-gray-100 text-gray-600 hover:bg-orange-50 hover:text-orange-600'
+                    ? '' 
+                    : ''
                   }`}
+                  style={
+                    filter === cat 
+                      ? { backgroundColor: '#000000', color: '#FFFFFF', border: '1px solid #000000' }
+                      : { backgroundColor: '#FFFFFF', color: '#000000', border: '1px solid #E5E5E5' }
+                  }
+                  onMouseEnter={(e) => {
+                    if (filter !== cat) {
+                      e.currentTarget.style.backgroundColor = '#000000';
+                      e.currentTarget.style.color = '#FFFFFF';
+                      e.currentTarget.style.borderColor = '#000000';
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (filter !== cat) {
+                      e.currentTarget.style.backgroundColor = '#FFFFFF';
+                      e.currentTarget.style.color = '#000000';
+                      e.currentTarget.style.borderColor = '#E5E5E5';
+                    }
+                  }}
                 >
                   {cat}
                 </motion.button>
@@ -152,10 +171,10 @@ export const Shop = () => {
           </div>
 
           {/* Price Filter */}
-          <div className="w-full lg:w-auto flex flex-wrap items-center gap-4 border-t lg:border-t-0 lg:border-l border-gray-100 pt-4 lg:pt-0 lg:pl-6">
-            <div className="flex items-center text-gray-600 gap-2">
+          <div className="w-full lg:w-auto flex flex-wrap items-center gap-4 border-t lg:border-t-0 lg:border-l pt-4 lg:pt-0 lg:pl-6" style={{ borderColor: '#E5E5E5' }}>
+            <div className="flex items-center gap-2" style={{ color: '#444444' }}>
               <SlidersHorizontal size={16} />
-              <span className="text-sm font-bold uppercase tracking-wide">Price:</span>
+              <span className="text-sm font-medium uppercase tracking-wide">Price:</span>
             </div>
             
             <div className="flex items-center gap-2">
@@ -164,23 +183,38 @@ export const Shop = () => {
                 min="0"
                 value={minInput}
                 onChange={(e) => setMinInput(e.target.value)}
-                className="w-20 p-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-100 transition-all bg-white"
+                className="w-20 p-2 text-sm border-b focus:outline-none transition-all bg-white"
+                style={{ borderColor: '#E5E5E5', color: '#111111' }}
+                onFocus={(e) => e.target.style.borderColor = '#111111'}
+                onBlur={(e) => e.target.style.borderColor = '#E5E5E5'}
                 placeholder="Min"
               />
-              <span className="text-gray-400">-</span>
+              <span style={{ color: '#444444' }}>-</span>
               <input
                 type="number"
                 min="0"
                 value={maxInput}
                 onChange={(e) => setMaxInput(e.target.value)}
-                className="w-20 p-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-100 transition-all bg-white"
+                className="w-20 p-2 text-sm border-b focus:outline-none transition-all bg-white"
+                style={{ borderColor: '#E5E5E5', color: '#111111' }}
+                onFocus={(e) => e.target.style.borderColor = '#111111'}
+                onBlur={(e) => e.target.style.borderColor = '#E5E5E5'}
                 placeholder="Max"
               />
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={handlePriceApply}
-                className="bg-orange-500 text-white px-4 py-2 text-xs font-bold uppercase tracking-widest rounded-lg hover:bg-orange-600 transition-colors shadow-md"
+                className="text-white px-5 py-2 text-xs font-medium uppercase tracking-widest transition-all"
+                style={{ backgroundColor: '#000000', color: '#FFFFFF', border: '1px solid #000000' }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = '#FFFFFF';
+                  e.currentTarget.style.color = '#000000';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = '#000000';
+                  e.currentTarget.style.color = '#FFFFFF';
+                }}
               >
                 Go
               </motion.button>
@@ -193,15 +227,16 @@ export const Shop = () => {
         <motion.div 
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="text-center py-20 bg-[#FFF5E1] rounded-xl shadow-md border-2 border-[#F0E5D0]"
+          className="text-center py-20 bg-white"
         >
-          <h3 className="font-serif text-2xl text-gray-900 mb-2 font-bold">No products found</h3>
-          <p className="text-gray-700 mb-4">Try adjusting your filters to see more results.</p>
+          <h3 className="font-serif text-2xl mb-2 font-bold" style={{ color: '#111111' }}>No products found</h3>
+          <p className="mb-4" style={{ color: '#444444' }}>Try adjusting your filters to see more results.</p>
           <motion.button 
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={handleResetFilters}
-            className="mt-4 text-green-700 font-semibold underline hover:text-green-800"
+            className="mt-4 font-medium underline"
+            style={{ color: '#111111' }}
           >
             Clear all filters
           </motion.button>
@@ -211,18 +246,19 @@ export const Shop = () => {
           <motion.p 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="text-sm text-gray-600 mb-6 font-medium"
+            className="text-sm mb-8 font-light"
+            style={{ color: '#444444' }}
           >
             Showing {filteredProducts.length} results
           </motion.p>
-          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+          <div className="product-grid w-full max-w-[1400px] mx-auto">
             {filteredProducts.map((product, index) => (
               <motion.div 
                 key={product.id}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.4, delay: index * 0.05 }}
-                className="h-full"
+                className="h-full w-full"
               >
                 <ProductCard product={product} />
               </motion.div>

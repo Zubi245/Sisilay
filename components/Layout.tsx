@@ -6,6 +6,9 @@ import { ShoppingBag, Menu, X, User, Phone, Mail, Instagram, Facebook } from 'lu
 export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { itemCount } = useCart();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isNavbarVisible, setIsNavbarVisible] = useState(true);
+  const [isFooterVisible, setIsFooterVisible] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
   const location = useLocation();
 
   const isAdmin = location.pathname.startsWith('/admin');
@@ -15,70 +18,85 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
     setIsMenuOpen(false);
   }, [location.pathname]);
 
+  // Handle navbar and footer visibility on scroll
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      const windowHeight = window.innerHeight;
+      const documentHeight = document.documentElement.scrollHeight;
+      
+      // Navbar logic
+      if (currentScrollY < 10) {
+        // Always show navbar at the top
+        setIsNavbarVisible(true);
+      } else if (currentScrollY > lastScrollY) {
+        // Scrolling down - hide navbar
+        setIsNavbarVisible(false);
+      } else {
+        // Scrolling up - show navbar
+        setIsNavbarVisible(true);
+      }
+      
+      // Footer logic - show when near bottom or scrolling up
+      const distanceFromBottom = documentHeight - (currentScrollY + windowHeight);
+      if (distanceFromBottom < 100 || currentScrollY < lastScrollY) {
+        setIsFooterVisible(true);
+      } else if (currentScrollY > lastScrollY) {
+        setIsFooterVisible(false);
+      }
+      
+      setLastScrollY(currentScrollY);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [lastScrollY]);
+
   return (
     <div className="flex flex-col min-h-screen font-sans">
-      {/* Announcement Bar */}
-      <div className="bg-gradient-to-r from-green-600 to-green-500 text-white text-[10px] md:text-xs text-center py-2.5 tracking-widest uppercase px-4 font-medium">
-        Free Shipping on Orders Above PKR 5000 • Premium Unstitched Suits
-      </div>
-
       {/* Navbar */}
-      <nav className="bg-[#FFFBF0] sticky top-0 z-50 shadow-sm border-b border-gray-100">
+      <nav 
+        className={`bg-white sticky top-0 z-50 shadow-sm transition-transform duration-300 ease-in-out ${
+          isNavbarVisible ? 'translate-y-0' : '-translate-y-full'
+        }`} 
+        style={{ borderBottom: '1px solid #E5E5E5' }}
+      >
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           
-          {/* Mobile Menu Button */}
-          <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="md:hidden text-brand-black p-1">
+          {/* Left: Menu Button (Always visible) */}
+          <button 
+            onClick={() => setIsMenuOpen(!isMenuOpen)} 
+            className="p-1 focus:outline-none active:bg-transparent transition-opacity duration-250 hover:opacity-70 bg-white"
+            style={{ color: '#111111', backgroundColor: '#FFFFFF' }}
+          >
             {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
 
-          {/* Logo */}
-          <Link to="/" className="flex items-center gap-2 md:gap-3 hover:scale-105 transition-transform duration-300">
+          {/* Center: Logo */}
+          <Link to="/" className="absolute left-1/2 transform -translate-x-1/2 flex items-center gap-2 md:gap-3 hover:scale-105 transition-transform duration-300">
             <img 
               src="/logo.png" 
               alt="Silsilay Logo" 
-              className="w-10 h-10 md:w-12 md:h-12 rounded-full object-cover shadow-md border-2 border-green-600"
+              className="w-10 h-10 md:w-12 md:h-12 rounded-full object-cover shadow-md"
+              style={{ border: '2px solid #000000' }}
               onError={(e) => {
                 e.currentTarget.style.display = 'none';
               }}
             />
-            <span className="text-xl md:text-2xl font-serif font-bold tracking-tight text-green-600">
+            <span className="text-xl md:text-2xl font-serif font-bold tracking-tight" style={{ color: '#111111' }}>
               Silsilay
             </span>
           </Link>
 
-          {/* Desktop Links */}
-          <div className="hidden sm:flex space-x-8 text-sm font-medium uppercase tracking-wide text-gray-700">
-            <Link to="/" className="hover:text-green-600 transition-all duration-300 hover:scale-105 font-medium relative group transform hover:-translate-y-0.5">
-              Home
-              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-green-600 transition-all duration-300 group-hover:w-full"></span>
-            </Link>
-            <Link to="/shop" className="hover:text-green-600 transition-all duration-300 hover:scale-105 font-medium relative group transform hover:-translate-y-0.5">
-              Shop
-              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-green-600 transition-all duration-300 group-hover:w-full"></span>
-            </Link>
-            <Link to="/category" className="hover:text-green-600 transition-all duration-300 hover:scale-105 font-medium relative group transform hover:-translate-y-0.5">
-              Category
-              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-green-600 transition-all duration-300 group-hover:w-full"></span>
-            </Link>
-            <Link to="/about" className="hover:text-green-600 transition-all duration-300 hover:scale-105 font-medium relative group transform hover:-translate-y-0.5">
-              About Us
-              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-green-600 transition-all duration-300 group-hover:w-full"></span>
-            </Link>
-            <Link to="/contact" className="hover:text-green-600 transition-all duration-300 hover:scale-105 font-medium relative group transform hover:-translate-y-0.5">
-              Contact
-              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-green-600 transition-all duration-300 group-hover:w-full"></span>
-            </Link>
-          </div>
-
-          {/* Icons */}
+          {/* Right: Icons */}
           <div className="flex items-center space-x-4 md:space-x-6">
-            <Link to="/login" className="text-gray-600 hover:text-green-600 transition-all duration-300 hover:scale-110">
-              <User size={20} />
-            </Link>
-            <Link to="/cart" className="text-gray-600 hover:text-green-600 transition-all duration-300 hover:scale-110 relative">
+            <Link to="/cart" className="transition-all duration-300 hover:scale-110 relative hover:opacity-70" style={{ color: '#111111' }}>
               <ShoppingBag size={20} />
               {itemCount > 0 && (
-                <span className="absolute -top-2 -right-2 bg-green-600 text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center animate-pulse">
+                <span className="absolute -top-2 -right-2 text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center animate-pulse" style={{ backgroundColor: '#000000' }}>
                   {itemCount}
                 </span>
               )}
@@ -86,66 +104,138 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
           </div>
         </div>
 
-        {/* Mobile Menu */}
+        {/* Sidebar Menu (Works for both mobile and desktop) */}
         <div 
-            className={`fixed inset-0 bg-black/50 z-40 md:hidden transition-opacity duration-300 ${isMenuOpen ? 'opacity-100 visible' : 'opacity-0 invisible'}`}
+            className={`fixed inset-0 bg-black/50 z-40 transition-opacity duration-300 ${isMenuOpen ? 'opacity-100 visible' : 'opacity-0 invisible'}`}
             onClick={() => setIsMenuOpen(false)}
         >
           <div 
-            className={`bg-[#FFFBF0] w-[80%] max-w-sm h-full shadow-xl transition-transform duration-300 transform ${isMenuOpen ? 'translate-x-0' : '-translate-x-full'}`}
+            className={`bg-white w-[80%] max-w-sm h-full shadow-xl transition-transform duration-300 transform ${isMenuOpen ? 'translate-x-0' : '-translate-x-full'}`}
             onClick={e => e.stopPropagation()}
           >
-            <div className="p-6 border-b border-gray-100 flex justify-between items-center">
+            <div className="p-6 flex justify-between items-center" style={{ borderBottom: '1px solid #E5E5E5' }}>
                <div className="flex items-center gap-2">
                  <img 
                    src="/logo.png" 
                    alt="Silsilay Logo" 
-                   className="w-8 h-8 rounded-full object-cover shadow-md border-2 border-green-600"
+                   className="w-8 h-8 rounded-full object-cover shadow-md"
+                   style={{ border: '2px solid #000000' }}
                    onError={(e) => {
                      e.currentTarget.style.display = 'none';
                    }}
                  />
-                 <span className="font-serif font-bold text-xl text-green-600">Silsilay</span>
+                 <span className="font-serif font-bold text-xl" style={{ color: '#111111' }}>Silsilay</span>
                </div>
-               <button onClick={() => setIsMenuOpen(false)}><X size={24} /></button>
+               <button 
+                 onClick={() => setIsMenuOpen(false)}
+                 className="focus:outline-none active:bg-transparent transition-opacity duration-250 hover:opacity-70 bg-white"
+                 style={{ color: '#111111', backgroundColor: '#FFFFFF' }}
+               >
+                 <X size={24} />
+               </button>
             </div>
             <div className="flex flex-col p-6 space-y-6 text-sm font-bold uppercase tracking-wide">
-              <Link to="/" onClick={() => setIsMenuOpen(false)} className="block py-2 border-b border-gray-50 hover:text-green-600 hover:bg-green-50 transition-all duration-300 hover:translate-x-2 rounded">Home</Link>
-              <Link to="/shop" onClick={() => setIsMenuOpen(false)} className="block py-2 border-b border-gray-50 hover:text-green-600 hover:bg-green-50 transition-all duration-300 hover:translate-x-2 rounded">Shop</Link>
-              <Link to="/category" onClick={() => setIsMenuOpen(false)} className="block py-2 border-b border-gray-50 hover:text-green-600 hover:bg-green-50 transition-all duration-300 hover:translate-x-2 rounded">Category</Link>
-              <Link to="/about" onClick={() => setIsMenuOpen(false)} className="block py-2 border-b border-gray-50 hover:text-green-600 hover:bg-green-50 transition-all duration-300 hover:translate-x-2 rounded">About Us</Link>
-              <Link to="/contact" onClick={() => setIsMenuOpen(false)} className="block py-2 border-b border-gray-50 hover:text-green-600 hover:bg-green-50 transition-all duration-300 hover:translate-x-2 rounded">Contact</Link>
-              {isAdmin && <Link to="/admin" onClick={() => setIsMenuOpen(false)} className="block py-2 text-green-600 hover:bg-green-50 transition-all duration-300 hover:translate-x-2 rounded">Admin Dashboard</Link>}
+              <Link to="/" onClick={() => setIsMenuOpen(false)} className="block py-2 transition-all duration-300 hover:translate-x-2 hover:opacity-70" style={{ borderBottom: '1px solid #E5E5E5', color: '#111111' }}>Home</Link>
+              <Link to="/shop" onClick={() => setIsMenuOpen(false)} className="block py-2 transition-all duration-300 hover:translate-x-2 hover:opacity-70" style={{ borderBottom: '1px solid #E5E5E5', color: '#111111' }}>Shop</Link>
+              <Link to="/category" onClick={() => setIsMenuOpen(false)} className="block py-2 transition-all duration-300 hover:translate-x-2 hover:opacity-70" style={{ borderBottom: '1px solid #E5E5E5', color: '#111111' }}>Category</Link>
+              <Link to="/about" onClick={() => setIsMenuOpen(false)} className="block py-2 transition-all duration-300 hover:translate-x-2 hover:opacity-70" style={{ borderBottom: '1px solid #E5E5E5', color: '#111111' }}>About Us</Link>
+              <Link to="/contact" onClick={() => setIsMenuOpen(false)} className="block py-2 transition-all duration-300 hover:translate-x-2 hover:opacity-70" style={{ borderBottom: '1px solid #E5E5E5', color: '#111111' }}>Contact</Link>
+              {isAdmin && <Link to="/admin" onClick={() => setIsMenuOpen(false)} className="block py-2 transition-all duration-300 hover:translate-x-2 hover:opacity-70" style={{ color: '#111111' }}>Admin Dashboard</Link>}
             </div>
           </div>
         </div>
       </nav>
 
       {/* Main Content */}
-      <main className="flex-grow bg-[#FFF8E7]">
+      <main className="flex-grow bg-white">
         {children}
       </main>
 
-      {/* Footer */}
-      <footer className="bg-gray-900 text-white pt-12 md:pt-16 pb-8">
+      {/* Footer - Slides up from bottom */}
+      <footer 
+        className={`text-white pt-16 md:pt-20 pb-8 transition-transform duration-500 ease-in-out ${
+          isFooterVisible ? 'translate-y-0' : 'translate-y-full'
+        }`} 
+        style={{ backgroundColor: '#000000' }}
+      >
         <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 mb-12">
+          {/* Newsletter Section - Top Center */}
+          <div className="max-w-xl mx-auto text-center mb-12 md:mb-16">
+            <h4 className="text-2xl md:text-3xl font-serif mb-3 text-white">Keep me updated</h4>
+            <p className="text-sm md:text-base mb-6" style={{ color: '#CCCCCC' }}>
+              Subscribe us and get more exciting offers and updates.
+            </p>
+            <form 
+              onSubmit={(e) => {
+                e.preventDefault();
+                const formElement = e.target as HTMLFormElement;
+                const email = formElement.email.value;
+                if (email) {
+                  // Save to localStorage
+                  const subscribers = JSON.parse(localStorage.getItem('silsilay_newsletter_subscribers') || '[]');
+                  if (!subscribers.includes(email)) {
+                    subscribers.push(email);
+                    localStorage.setItem('silsilay_newsletter_subscribers', JSON.stringify(subscribers));
+                    alert('Thank you for subscribing! You will receive updates on our latest collections.');
+                  } else {
+                    alert('You are already subscribed to our newsletter!');
+                  }
+                  formElement.reset();
+                }
+              }}
+              className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto"
+            >
+              <input
+                type="email"
+                name="email"
+                placeholder="Enter your email"
+                required
+                className="flex-1 px-4 py-3 text-sm bg-white text-black focus:outline-none transition-all"
+                style={{ border: '1px solid #FFFFFF' }}
+              />
+              <button
+                type="submit"
+                className="px-6 py-3 text-sm font-medium uppercase tracking-wider transition-all duration-250 whitespace-nowrap"
+                style={{ 
+                  backgroundColor: '#FFFFFF', 
+                  color: '#000000',
+                  border: '1px solid #FFFFFF'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = '#000000';
+                  e.currentTarget.style.color = '#FFFFFF';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = '#FFFFFF';
+                  e.currentTarget.style.color = '#000000';
+                }}
+              >
+                Subscribe
+              </button>
+            </form>
+          </div>
+
+          {/* Divider */}
+          <div className="w-full h-px mb-12" style={{ backgroundColor: '#333333' }}></div>
+
+          {/* Footer Content - Bottom */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 mb-8">
             <div>
-              <h3 className="text-2xl font-serif font-bold mb-4 md:mb-6">
-                <span className="text-green-400">Silsilay</span>
+              <h3 className="text-2xl font-serif font-bold mb-4 md:mb-6 text-white">
+                Silsilay
               </h3>
-              <p className="text-gray-400 text-sm leading-relaxed mb-6">
+              <p className="text-sm leading-relaxed mb-6" style={{ color: '#CCCCCC' }}>
                 Premium unstitched suits designed for the modern woman. Experience luxury, elegance, and tradition in every thread.
               </p>
-              <div className="flex space-x-4 text-gray-400">
-                <Instagram size={20} className="hover:text-green-400 cursor-pointer transition-colors duration-300" />
-                <Facebook size={20} className="hover:text-green-400 cursor-pointer transition-colors duration-300" />
+              <div className="flex space-x-4">
+                <Instagram size={20} className="hover:opacity-70 cursor-pointer transition-opacity duration-300" style={{ color: '#FFFFFF' }} />
+                <Facebook size={20} className="hover:opacity-70 cursor-pointer transition-opacity duration-300" style={{ color: '#FFFFFF' }} />
               </div>
             </div>
             
             <div>
-              <h4 className="text-lg font-serif mb-4 md:mb-6 text-green-400">Customer Care</h4>
-              <ul className="space-y-3 text-sm text-gray-400">
+              <h4 className="text-lg font-serif mb-4 md:mb-6 text-white">Customer Care</h4>
+              <ul className="space-y-3 text-sm" style={{ color: '#CCCCCC' }}>
                 <li><Link to="/contact" className="hover:text-white transition-colors duration-300">Contact Us</Link></li>
                 <li><Link to="/shop" className="hover:text-white transition-colors duration-300">Shipping Policy</Link></li>
                 <li><Link to="/shop" className="hover:text-white transition-colors duration-300">Returns & Exchanges</Link></li>
@@ -154,8 +244,8 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
             </div>
 
             <div>
-              <h4 className="text-lg font-serif mb-4 md:mb-6 text-green-400">Contact Info</h4>
-              <ul className="space-y-4 text-sm text-gray-400">
+              <h4 className="text-lg font-serif mb-4 md:mb-6 text-white">Contact Info</h4>
+              <ul className="space-y-4 text-sm" style={{ color: '#CCCCCC' }}>
                 <li className="flex items-center space-x-3 hover:text-white transition-colors duration-300">
                   <Phone size={16} />
                   <span>+92 300 1234567</span>
@@ -171,7 +261,7 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
             </div>
           </div>
           
-          <div className="border-t border-gray-800 pt-8 text-center text-xs text-gray-500">
+          <div className="pt-6 text-center text-xs" style={{ borderTop: '1px solid #333333', color: '#888888' }}>
             &copy; {new Date().getFullYear()} Silsilay. All rights reserved.
           </div>
         </div>
@@ -179,10 +269,11 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
 
       {/* WhatsApp Floating Button */}
       <a 
-        href="https://wa.me/923001234567" 
+        href="https://wa.me/923046361226" 
         target="_blank" 
         rel="noopener noreferrer"
-        className="fixed bottom-6 right-6 z-40 bg-green-500 text-white p-3 md:p-4 rounded-full shadow-lg hover:scale-110 hover:bg-green-600 transition-all duration-300 hover:shadow-xl"
+        className="fixed bottom-6 right-6 z-40 text-white p-3 md:p-4 rounded-full shadow-lg hover:scale-110 transition-all duration-300 hover:shadow-xl"
+        style={{ backgroundColor: '#000000' }}
         aria-label="Contact on WhatsApp"
       >
         <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="currentColor" className="md:w-8 md:h-8">

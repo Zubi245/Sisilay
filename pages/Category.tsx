@@ -98,7 +98,7 @@ export const Category = () => {
             <div className="flex items-start space-x-3">
               <span className="text-green-600 text-xl">✓</span>
               <div>
-                <p className="font-semibold text-gray-900">Free Shipping</p>
+               <p className="font-semibold text-gray-900">Free Shipping</p>
                 <p className="text-sm text-gray-600">On orders above PKR 5,000</p>
               </div>
             </div>
