@@ -252,16 +252,8 @@ export const Shop = () => {
             Showing {filteredProducts.length} results
           </motion.p>
           <div className="product-grid w-full max-w-[1400px] mx-auto">
-            {filteredProducts.map((product, index) => (
-              <motion.div 
-                key={product.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4, delay: index * 0.05 }}
-                className="h-full w-full"
-              >
-                <ProductCard product={product} />
-              </motion.div>
+            {filteredProducts.map((product) => (
+              <ProductCard key={product.id} product={product} />
             ))}
           </div>
         </>

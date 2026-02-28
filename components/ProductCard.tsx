@@ -47,9 +47,9 @@ export const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
     <>
       <Link to={`/product/${product.id}`} className="block h-full">
         <motion.div 
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 60 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, ease: "easeOut" }}
+          transition={{ duration: 0.8, ease: [0.4, 0, 0.2, 1] }}
           className="group transition-all duration-300 relative h-full flex flex-col"
           style={{ width: '100%', maxWidth: '300px', margin: '0 auto' }}
         >
