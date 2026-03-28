@@ -1,9 +1,0 @@
-import { NextResponse } from "next/server";
-import { connectDB } from "../../../lib/db";
-import Order from "../../../models/order";
-
-export async function GET() {
-  await connectDB();
-  const orders = await Order.find().populate('user').populate('products.product');
-  return NextResponse.json(orders);
-}

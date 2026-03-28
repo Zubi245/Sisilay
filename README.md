@@ -1,171 +1,221 @@
-# Silsilay - E-commerce Store
+# Sisilay - E-commerce Platform (Separated Architecture)
 
-A modern, responsive e-commerce platform for luxury unstitched ladies suits built with React, TypeScript, and Vite.
+A modern e-commerce platform for luxury unstitched suits, built with a clean separation between frontend and backend.
 
-## Features
+## 🏗️ Architecture
 
-- 🛍️ **Full E-commerce Functionality**
-  - Product browsing with filters (category, price range)
-  - Product detail pages with image gallery
-  - Shopping cart with persistent storage
-  - Checkout process
-  - Order management
+This project demonstrates a professional separation of concerns:
 
-- 👨‍💼 **Admin Dashboard**
-  - Product management (add, edit, delete)
-  - Image upload support
-  - Price management (regular & sale prices)
-  - Order management with status updates
-  - Advanced filtering and search
+- **Frontend**: Vite + React (Client-only, Port 3000)
+- **Backend**: Next.js API (Server-only, Port 3001)
+- **Database**: MongoDB with Mongoose
+- **Authentication**: JWT-based auth system
 
-- 🎨 **Modern UI/UX**
-  - Responsive design (mobile, tablet, desktop)
-  - Smooth animations and hover effects
-  - Image lazy loading with fallbacks
-  - Clean, luxury aesthetic
+## 📁 Project Structure
 
-- 🔒 **Authentication**
-  - Secure admin login
-  - Protected admin routes
+```
+├── backend/              # Next.js API Server
+│   ├── app/api/         # REST API endpoints
+│   ├── lib/             # Utilities (DB, Auth, Cloudinary)
+│   ├── models/          # Mongoose schemas
+│   └── middleware/      # Authentication middleware
+│
+├── frontend/            # Vite + React App
+│   └── src/
+│       ├── components/  # UI components
+│       ├── pages/       # React pages
+│       └── services/    # API client
+│
+└── Documentation/       # Complete guides
+    ├── INDEX.md        # Start here!
+    └── ...             # 7 more guides
+```
 
-## Tech Stack
-
-- **Frontend**: React 18, TypeScript, Vite
-- **Routing**: React Router v6
-- **Styling**: Tailwind CSS
-- **Icons**: Lucide React
-- **State Management**: React Context API
-- **Storage**: LocalStorage (can be migrated to backend)
-
-## Getting Started
+## 🚀 Quick Start
 
 ### Prerequisites
+- Node.js 18+
+- MongoDB (local or Atlas)
+- Git
 
-- Node.js 18+ and npm
-
-### Installation
-
-1. Clone the repository:
+### 1. Clone Repository
 ```bash
-git clone <your-repo-url>
-cd silsilay
+git clone https://github.com/YOUR_USERNAME/sisilay.git
+cd sisilay
 ```
 
-2. Install dependencies:
+### 2. Backend Setup
 ```bash
+cd backend
 npm install
+cp .env.example .env
+# Edit .env with your MongoDB URI and secrets
+npm run dev  # Starts on port 3001
 ```
 
-3. Start the development server:
+### 3. Frontend Setup
 ```bash
-npm run dev
+cd frontend
+npm install
+cp .env.example .env
+# Edit .env with backend URL
+npm run dev  # Starts on port 3000
 ```
 
-4. Open your browser and navigate to `http://localhost:3000`
+### 4. Access Application
+- **Frontend**: http://localhost:3000
+- **Backend API**: http://localhost:3001/api
+- **Admin Login**: http://localhost:3000/login
+  - Username: `admin`
+  - Password: `password`
 
-## Available Scripts
+## 📚 Documentation
 
-- `npm run dev` - Start development server
-- `npm run build` - Build for production
-- `npm run preview` - Preview production build
-- `npm run lint` - Run ESLint
+**Start Here**: [Documentation/INDEX.md](./INDEX.md)
 
-## Project Structure
+### Quick Links
+- [Quick Start Guide](./README_SEPARATION.md)
+- [Migration Guide](./MIGRATION_GUIDE.md)
+- [API Documentation](./API_DOCUMENTATION.md)
+- [Architecture Diagrams](./ARCHITECTURE_DIAGRAM.md)
+- [Folder Structure](./FOLDER_STRUCTURE.md)
 
+## 🔑 Key Features
+
+### Backend API
+- ✅ RESTful API with 11 endpoints
+- ✅ JWT authentication
+- ✅ MongoDB integration
+- ✅ Password hashing (bcrypt)
+- ✅ Image upload (Cloudinary)
+- ✅ CORS configured
+- ✅ TypeScript support
+
+### Frontend
+- ✅ Modern React 18
+- ✅ Centralized API service
+- ✅ Token management
+- ✅ Responsive design
+- ✅ Tailwind CSS
+- ✅ TypeScript support
+
+## 🛠️ Tech Stack
+
+### Frontend
+- **Framework**: Vite + React 18
+- **Language**: TypeScript
+- **HTTP Client**: Axios
+- **Routing**: React Router v6
+- **Styling**: Tailwind CSS
+- **Animation**: Framer Motion
+- **Icons**: Lucide React
+
+### Backend
+- **Framework**: Next.js 14 (App Router)
+- **Language**: TypeScript
+- **Database**: MongoDB
+- **ODM**: Mongoose
+- **Authentication**: JWT (jsonwebtoken)
+- **Password**: bcryptjs
+- **Images**: Cloudinary
+
+## 📡 API Endpoints
+
+### Public
+- `GET /api/products` - Get all products
+- `GET /api/products/:id` - Get single product
+- `GET /api/hero` - Get hero slides
+- `POST /api/orders` - Create order
+- `POST /api/auth/login` - Admin login
+
+### Admin (JWT Required)
+- `GET /api/admin/products` - Get all products
+- `POST /api/admin/products` - Create product
+- `PUT /api/admin/products` - Update product
+- `DELETE /api/admin/products` - Delete product
+- `GET /api/admin/orders` - Get all orders
+- `PATCH /api/admin/orders` - Update order status
+
+## 🔐 Environment Variables
+
+### Backend (.env)
+```env
+MONGO_URI=mongodb://localhost:27017/sisilay
+JWT_SECRET=your-super-secret-key
+CLOUDINARY_CLOUD_NAME=your-cloud-name
+CLOUDINARY_API_KEY=your-api-key
+CLOUDINARY_API_SECRET=your-api-secret
+FRONTEND_URL=http://localhost:3000
 ```
-├── components/          # Reusable UI components
-│   ├── Layout.tsx      # Main layout with navbar & footer
-│   ├── ProductCard.tsx # Product card component
-│   └── SEO.tsx         # SEO meta tags component
-├── pages/              # Page components
-│   ├── Home.tsx        # Homepage
-│   ├── Shop.tsx        # Product listing
-│   ├── ProductDetail.tsx # Product detail page
-│   ├── Cart.tsx        # Shopping cart
-│   ├── Checkout.tsx    # Checkout page
-│   ├── Login.tsx       # Admin login
-│   └── AdminDashboard.tsx # Admin panel
-├── context/            # React Context providers
-│   └── CartContext.tsx # Shopping cart state
-├── services/           # Business logic
-│   └── db.ts          # Mock database (localStorage)
-├── types.ts           # TypeScript type definitions
-└── vite.config.ts     # Vite configuration
 
-## Admin Access
+### Frontend (.env)
+```env
+VITE_API_URL=http://localhost:3001
+```
 
-- **URL**: `/login`
-- **Username**: `admin`
-- **Password**: `password`
+## 🧪 Testing
 
-After login, you'll be redirected to `/admin` where you can:
-- Manage products (add, edit, delete)
-- Upload product images
-- Set prices and sale prices
-- Manage orders and update status
-
-## Production Deployment
-
-### Build for Production
-
+### Test Backend
 ```bash
+# Test products endpoint
+curl http://localhost:3001/api/products
+
+# Test login
+curl -X POST http://localhost:3001/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"username":"admin","password":"password"}'
+```
+
+### Test Frontend
+1. Visit http://localhost:3000
+2. Browse products
+3. Login at /login
+4. Test admin dashboard
+
+## 📦 Deployment
+
+### Backend (Vercel)
+```bash
+cd backend
+vercel
+```
+
+### Frontend (Vercel/Netlify)
+```bash
+cd frontend
 npm run build
+vercel
 ```
 
-This creates an optimized production build in the `dist` folder.
+## 🤝 Contributing
 
-### Deploy to Vercel/Netlify
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
-1. Connect your repository to Vercel or Netlify
-2. Set build command: `npm run build`
-3. Set output directory: `dist`
-4. Deploy!
+## 📝 License
 
-### Environment Variables (Optional)
+This project is licensed under the MIT License.
 
-If you plan to connect to a backend API, create a `.env` file:
+## 👥 Authors
 
-```
-VITE_API_URL=https://your-api-url.com
-VITE_CLOUDINARY_URL=your-cloudinary-url
-```
+- Your Name - Initial work
 
-## Features in Detail
+## 🙏 Acknowledgments
 
-### Product Management
-- Add products with images, prices, categories
-- Edit existing products
-- Delete products
-- Set sale prices for discounts
+- Built with modern best practices
+- Clean architecture principles
+- API-first design
+- Production-ready code
 
-### Order Management
-- View all orders
-- Filter by status, date range
-- Search by customer name, email, or order ID
-- Update order status (Pending, Processing, Shipped, Delivered)
+## 📞 Support
 
-### Shopping Experience
-- Browse products by category
-- Filter by price range
-- View product details with image gallery
-- Add to cart
-- Secure checkout process
+For detailed documentation, see [Documentation/INDEX.md](./INDEX.md)
 
-## Browser Support
-
-- Chrome (latest)
-- Firefox (latest)
-- Safari (latest)
-- Edge (latest)
-
-## License
-
-Private - All rights reserved
-
-## Support
-
-For support, email support@silsilay.com or contact via WhatsApp.
+For issues and questions, please open an issue on GitHub.
 
 ---
 
-Built with ❤️ for Silsilay
+**⭐ Star this repo if you find it helpful!**
